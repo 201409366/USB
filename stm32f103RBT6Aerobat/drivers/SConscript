@@ -13,6 +13,7 @@ usart.c
 nRF24L01.c
 platform.c
 machine.c
+drv_mpu6050.c
 """)
 
 if GetDepend('RT_USING_I2C'):

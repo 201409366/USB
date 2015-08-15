@@ -357,9 +357,9 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls />
-              <Define>STM32F10X_HD, RT_USING_ARM_LIBC, USE_STDPERIPH_DRIVER</Define>
+              <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine />
-              <IncludePath>applications;.;drivers;Libraries\STM32F10x_StdPeriph_Driver\inc;Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\components\CMSIS\Include;..\..\include;..\..\libcpu\arm\cortex-m3;..\..\libcpu\arm\common;..\..\components\cplusplus;..\..\components\drivers\include;..\..\components\drivers\include;..\..\components\drivers\spi;..\..\components\drivers\include;..\..\components\drivers\include;..\..\components\drivers\sensors;..\..\components\drivers\include;..\..\components\finsh;..\..\components\init;..\..\components\libc\armlibc</IncludePath>
+              <IncludePath>applications;.;drivers;Libraries\STM32F10x_StdPeriph_Driver\inc;Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\components\CMSIS\Include;..\..\include;..\..\libcpu\arm\cortex-m3;..\..\libcpu\arm\common;..\..\components\drivers\include;..\..\components\drivers\include;..\..\components\drivers\spi;..\..\components\drivers\include;..\..\components\drivers\include;..\..\components\finsh;..\..\components\init</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -413,13 +413,6 @@
               <FileName>appNRF24L01.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\appNRF24L01.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>appSensorTest.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\appSensorTest.c</FilePath>
             </File>
           </Files>
           <Files>
@@ -486,6 +479,13 @@
               <FileName>machine.c</FileName>
               <FileType>1</FileType>
               <FilePath>drivers\machine.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>drv_mpu6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>drivers\drv_mpu6050.c</FilePath>
             </File>
           </Files>
           <Files>
@@ -800,23 +800,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>CPlusPlus</GroupName>
-          <Files>
-            <File>
-              <FileName>crt.cpp</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\cplusplus\crt.cpp</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>crt_init.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\cplusplus\crt_init.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>DeviceDrivers</GroupName>
           <Files>
             <File>
@@ -830,6 +813,13 @@
               <FileName>i2c_dev.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\drivers\i2c\i2c_dev.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>i2c-bit-ops.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\i2c\i2c-bit-ops.c</FilePath>
             </File>
           </Files>
           <Files>
@@ -893,23 +883,6 @@
               <FileName>workqueue.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\drivers\src\workqueue.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Sensors</GroupName>
-          <Files>
-            <File>
-              <FileName>sensor.cpp</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\drivers\sensors\sensor.cpp</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>mpu6050_sensor.cpp</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\drivers\sensors\mpu6050_sensor.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1014,23 +987,6 @@
               <FileName>components.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\init\components.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>libc</GroupName>
-          <Files>
-            <File>
-              <FileName>mem_std.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\libc\armlibc\mem_std.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>stubs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\libc\armlibc\stubs.c</FilePath>
             </File>
           </Files>
         </Group>

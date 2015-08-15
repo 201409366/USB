@@ -1,5 +1,6 @@
 #include <rtthread.h>
 #include "board.h"
+#include "drv_mpu6050.h"
 
 #ifdef RT_USING_SPI
 #include "rt_stm32f10x_spi.h"
@@ -113,9 +114,9 @@ void rt_platform_init(void)
 #endif /* RT_USING_NRF24L01 */	
 	
 #ifdef RT_USING_I2C
-		rt_hw_i2c_init();
+		//rt_hw_i2c_init();
+		rt_hw_mpu6050_init("i2c1",MPU6050_DEFAULT_ADDRESS);
 #endif /* RT_USING_I2C */	
-	
-	
+		
 }
 

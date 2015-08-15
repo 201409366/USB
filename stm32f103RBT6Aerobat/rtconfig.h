@@ -78,7 +78,7 @@
 
 /* SECTION: finsh, a C-Express shell */
 #define RT_USING_FINSH
-//#define FINSH_THREAD_PRIORITY   3
+//#define FINSH_THREAD_PRIORITY   7
 /* Using symbol table */
 #define FINSH_USING_SYMTAB
 #define FINSH_USING_DESCRIPTION
@@ -191,13 +191,6 @@
 
 /* IIC device */
 #define RT_USING_I2C
-//#define RT_USING_I2C_BITOPS //Ä£ÄâI2C
-
-/* Enable C++ support */
-#define RT_USING_CPLUSPLUS
-#define RT_USING_LIBC
-
-#define RT_USING_SENSOR
-#define SENSOR_USING_MPU6050
+#define RT_USING_I2C_BITOPS //Ä£ÄâI2C
 
 #endif

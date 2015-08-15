@@ -4,23 +4,53 @@
 
 #ifdef RT_USING_I2C_BITOPS
 
-/* GPIO define
-SCL: I2C1_SCL PB6
-SDA: I2C1_SDA PB7
-*/
-
 #define RCC_I2C_SCL         RCC_APB2Periph_GPIOB
 #define GPIO_PORT_I2C_SCL   GPIOB
-#define PIN_I2C_SCL		    GPIO_Pin_6
+#define PIN_I2C_SCL		      GPIO_Pin_6
 
 #define RCC_I2C_SDA         RCC_APB2Periph_GPIOB
 #define GPIO_PORT_I2C_SDA   GPIOB
-#define PIN_I2C_SDA		    GPIO_Pin_7
+#define PIN_I2C_SDA		      GPIO_Pin_7
+
+//IO方向设置
+#define SDA_IN()  {GPIO_PORT_I2C_SDA->CRL&=0X0FFFFFFF;GPIO_PORT_I2C_SDA->CRH|=0X8FFFFFFF;}
+//上拉/下拉 输入
+
+#define SDA_OUT() {GPIO_PORT_I2C_SDA->CRL&=0X0FFFFFFF;GPIO_PORT_I2C_SDA->CRH|=0X3FFFFFFF;}
+//
+
+#define SCL_IN()  {GPIO_PORT_I2C_SCL->CRL&=0XF0FFFFFF;GPIO_PORT_I2C_SCL->CRH|=0XF8FFFFFF;}
+#define SCL_OUT() {GPIO_PORT_I2C_SCL->CRL&=0XF0FFFFFF;GPIO_PORT_I2C_SCL->CRH|=0XF3FFFFFF;}
+
+//#define RCC_I2C_SCL         RCC_APB2Periph_GPIOC
+//#define GPIO_PORT_I2C_SCL   GPIOC
+//#define PIN_I2C_SCL		    GPIO_Pin_12
+
+//#define RCC_I2C_SDA         RCC_APB2Periph_GPIOC
+//#define GPIO_PORT_I2C_SDA   GPIOC
+//#define PIN_I2C_SDA		    GPIO_Pin_11
+
+////IO方向设置
+//#define SDA_IN()  {GPIO_PORT_I2C_SDA->CRH&=0XFFFF0FFF;GPIO_PORT_I2C_SDA->CRH|=8<<12;}
+////上拉/下拉 输入
+
+//#define SDA_OUT() {GPIO_PORT_I2C_SDA->CRH&=0XFFFF0FFF;GPIO_PORT_I2C_SDA->CRH|=3<<12;}
+////
+
+//#define SCL_IN()  {GPIO_PORT_I2C_SCL->CRH&=0XFFF0FFFF;GPIO_PORT_I2C_SCL->CRH|=8<<16;}
+//#define SCL_OUT() {GPIO_PORT_I2C_SCL->CRH&=0XFFF0FFFF;GPIO_PORT_I2C_SCL->CRH|=3<<16;}
 
 static struct rt_i2c_bus_device i2c_device;
+static uint8_t isSDAOut = 1;//1 out 0 in
+static uint8_t isSCLOut = 1;//1 out 0 in
 
 static void gpio_set_sda(void *data, rt_int32_t state)
 {
+		if(!isSDAOut) 
+		{
+			SDA_OUT();
+			isSDAOut = 1;
+		}
     if (state)
     {
         GPIO_SetBits(GPIO_PORT_I2C_SDA, PIN_I2C_SDA);
@@ -31,8 +61,23 @@ static void gpio_set_sda(void *data, rt_int32_t state)
     }
 }
 
+static rt_int32_t gpio_get_sda(void *data)
+{
+		if(isSDAOut) 
+		{
+			SDA_IN();
+			isSDAOut = 0;
+		}		
+    return GPIO_ReadInputDataBit(GPIO_PORT_I2C_SDA, PIN_I2C_SDA);
+}
+
 static void gpio_set_scl(void *data, rt_int32_t state)
 {
+		if(!isSCLOut) 
+		{
+			SCL_OUT();
+			isSCLOut = 1;
+		}
     if (state)
     {
         GPIO_SetBits(GPIO_PORT_I2C_SCL, PIN_I2C_SCL);
@@ -43,14 +88,14 @@ static void gpio_set_scl(void *data, rt_int32_t state)
     }
 }
 
-static rt_int32_t gpio_get_sda(void *data)
-{
-    return GPIO_ReadInputDataBit(GPIO_PORT_I2C_SDA, PIN_I2C_SDA);
-}
-
 static rt_int32_t gpio_get_scl(void *data)
 {
-    return GPIO_ReadInputDataBit(GPIO_PORT_I2C_SCL, PIN_I2C_SCL);
+		if(isSCLOut) 
+		{
+			SCL_IN();
+			isSCLOut = 0;
+		}
+		return GPIO_ReadInputDataBit(GPIO_PORT_I2C_SCL, PIN_I2C_SCL);
 }
 
 static void gpio_udelay(rt_uint32_t us)
@@ -73,7 +118,7 @@ static const struct rt_i2c_bit_ops bit_ops =
 
     gpio_udelay,
 
-    5,
+    1,
     100
 };
 
@@ -351,7 +396,9 @@ rt_err_t rt_hw_i2c_init(void)
 		GPIO_Init(GPIO_PORT_I2C_SDA, &GPIO_InitStructure);
 
     GPIO_SetBits(GPIO_PORT_I2C_SDA, PIN_I2C_SDA);
-
+		GPIO_SetBits(GPIO_PORT_I2C_SCL, PIN_I2C_SCL);
+		isSDAOut = 1;
+		isSCLOut = 1;
     rt_memset((void *)&i2c_device, 0, sizeof(struct rt_i2c_bus_device));
     i2c_device.priv = (void *)&bit_ops;
     rt_i2c_bit_add_bus(&i2c_device, "i2c1");
@@ -362,6 +409,14 @@ rt_err_t rt_hw_i2c_init(void)
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1,ENABLE);
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO , ENABLE);
 
+//		RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOC , ENABLE  );
+//		GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_12 | GPIO_Pin_11;
+//		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+//		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;  
+//		GPIO_Init(GPIOC, &GPIO_InitStructure);
+//		
+//		GPIO_SetBits(GPIOC, GPIO_Pin_11);
+		
 		/* Configure I2C1 pins: PB6->SCL and PB7->SDA */
 		GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_6 | GPIO_Pin_7;
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -375,10 +430,9 @@ rt_err_t rt_hw_i2c_init(void)
 		I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
 		I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
 		I2C_InitStructure.I2C_ClockSpeed = 100000;  /* 100K速度 */
-
-		I2C_Init(I2C1, &I2C_InitStructure);
 		
 		I2C_Cmd(I2C1, ENABLE);
+		I2C_Init(I2C1, &I2C_InitStructure);
 		/*允许1字节1应答模式*/
 		I2C_AcknowledgeConfig(I2C1, ENABLE);
 
@@ -389,3 +443,5 @@ rt_err_t rt_hw_i2c_init(void)
 
 #endif
 }
+
+INIT_BOARD_EXPORT(rt_hw_i2c_init);

@@ -171,7 +171,8 @@ void rt_init_thread_entry(void* parameter)
 		appMachineInit();
 #endif /* RT_USING_MACHINEAPP */		
 		
-		appSensorInit();
+		//appSensorInit();
+		
 		
 }
 

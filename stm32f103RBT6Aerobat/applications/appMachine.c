@@ -21,6 +21,6 @@ rt_err_t appMachineInit(void){
 
 void rt_appMachine_thread_entry(void* parameter) {
 	while(1) {
-		rt_thread_delay(RT_TICK_PER_SECOND);
+		rt_thread_delay(RT_TICK_PER_SECOND * 100);
 	}
 }

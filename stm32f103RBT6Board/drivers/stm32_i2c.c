@@ -57,7 +57,7 @@ static rt_int32_t gpio_get_sda(void *data)
 		{
 			SDA_IN();
 			isSDAOut = 0;
-		}
+		}		
     return GPIO_ReadInputDataBit(GPIO_PORT_I2C_SDA, PIN_I2C_SDA);
 }
 

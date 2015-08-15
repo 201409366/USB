@@ -15,40 +15,22 @@ void AT24CXX_Init(void)
 u8 AT24CXX_ReadOneByte(u16 ReadAddr)
 {				  
 	u8 temp=0,address;	
-	struct rt_i2c_msg msgs[2];
+	struct rt_i2c_msg msgs;
 	
 	address = ReadAddr;
-	msgs[0].addr = i2c_addr;
-	msgs[0].flags = RT_I2C_WR;
-	msgs[0].buf   = &address;
-	msgs[0].len   = 2;	
+	msgs.addr = i2c_addr;
+	msgs.flags = RT_I2C_WR;
+	msgs.buf   = &address;
+	msgs.len   = 1;	
+	rt_i2c_transfer(i2c_bus, &msgs, 1);
+	
+	
+	msgs.flags = RT_I2C_RD; /* Read from slave */
+	msgs.buf   = &temp;	
 
-	msgs[1].addr  = i2c_addr;
-	msgs[1].flags = RT_I2C_RD; /* Read from slave */
-	msgs[1].buf   = &temp;
-	msgs[1].len   = 2;
-
-	rt_i2c_transfer(i2c_bus, msgs, 2);
+	rt_i2c_transfer(i2c_bus, &msgs, 1);
 	return temp;	
 
-//	
-//    IIC_Start();  
-//	if(EE_TYPE>AT24C16)
-//	{
-//		IIC_Send_Byte(0XA0);	   //发送写命令
-//		IIC_Wait_Ack();
-//		IIC_Send_Byte(ReadAddr>>8);//发送高地址
-//		IIC_Wait_Ack();		 
-//	}else IIC_Send_Byte(0XA0+((ReadAddr/256)<<1));   //发送器件地址0XA0,写数据 	 
-
-//	IIC_Wait_Ack(); 
-//    IIC_Send_Byte(ReadAddr%256);   //发送低地址
-//	IIC_Wait_Ack();	    
-//	IIC_Start();  	 	   
-//	IIC_Send_Byte(0XA1);           //进入接收模式			   
-//	IIC_Wait_Ack();	 
-//    temp=IIC_Read_Byte(0);		   
-//    IIC_Stop();//产生一个停止条件	    
 	return temp;
 }
 //在AT24CXX指定地址写入一个数据
@@ -56,36 +38,20 @@ u8 AT24CXX_ReadOneByte(u16 ReadAddr)
 //DataToWrite:要写入的数据
 void AT24CXX_WriteOneByte(u16 WriteAddr,u8 DataToWrite)
 {				
-	u8 address[2];	
-	struct rt_i2c_msg msgs[1];
+	u8 address;	
+	struct rt_i2c_msg msgs;
 	
-	address[0] = WriteAddr;
-	address[1] = DataToWrite;
-	
-	msgs[0].addr = i2c_addr;
-	msgs[0].flags = RT_I2C_WR;
-	msgs[0].buf   = address;
-	msgs[0].len   = 2;
-	
-	rt_i2c_transfer(i2c_bus, msgs, 1);	
-	
-//    IIC_Start();  
-//	if(EE_TYPE>AT24C16)
-//	{
-//		IIC_Send_Byte(0XA0);	    //发送写命令
-//		IIC_Wait_Ack();
-//		IIC_Send_Byte(WriteAddr>>8);//发送高地址
-// 	}else
-//	{
-//		IIC_Send_Byte(0XA0+((WriteAddr/256)<<1));   //发送器件地址0XA0,写数据 
-//	}	 
-//	IIC_Wait_Ack();	   
-//    IIC_Send_Byte(WriteAddr%256);   //发送低地址
-//	IIC_Wait_Ack(); 	 										  		   
-//	IIC_Send_Byte(DataToWrite);     //发送字节							   
-//	IIC_Wait_Ack();  		    	   
-//    IIC_Stop();//产生一个停止条件 
-//	delay_ms(10);	 
+	address = WriteAddr;
+
+	msgs.addr = i2c_addr;
+	msgs.flags = RT_I2C_WR;
+	msgs.buf   = &address;
+	msgs.len   = 1;
+	rt_i2c_transfer(i2c_bus, &msgs, 1);	
+		
+	msgs.buf   = &DataToWrite;	
+	rt_i2c_transfer(i2c_bus, &msgs, 1);	
+
 }
 //在AT24CXX里面的指定地址开始写入长度为Len的数据
 //该函数用于写入16bit或者32bit的数据.

@@ -417,6 +417,13 @@
           </Files>
           <Files>
             <File>
+              <FileName>appTestMPU6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\appTestMPU6050.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
               <FileName>application.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\application.c</FilePath>

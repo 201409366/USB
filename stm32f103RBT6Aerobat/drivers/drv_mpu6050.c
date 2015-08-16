@@ -72,7 +72,7 @@ static rt_size_t mpu6050_write(rt_device_t dev, rt_off_t pos, const void *buffer
  * The following is rt-thread device operating interface
  */
 static rt_err_t mpu6050_init(rt_device_t dev)
-{
+{	
   mpu6050_setSleepEnabled(dev,0); //进入工作状态
   rt_thread_delay(1);
 	mpu6050_setClockSource(dev,MPU6050_CLOCK_PLL_XGYRO); //设置时钟  0x6b   0x01
@@ -86,8 +86,8 @@ static rt_err_t mpu6050_init(rt_device_t dev)
 	mpu6050_setI2CMasterModeEnabled(dev,0);	 //不让MPU6050 控制AUXI2C
 	rt_thread_delay(1);
 	mpu6050_setI2CBypassEnabled(dev,1);	
-	
-    return RT_EOK;
+		
+  return RT_EOK;
 }
 
 static rt_err_t mpu6050_open(rt_device_t dev, rt_uint16_t oflag)
@@ -99,6 +99,8 @@ static rt_err_t mpu6050_open(rt_device_t dev, rt_uint16_t oflag)
     }
     else
     {
+				
+			//	mpu6050_init(dev);
         return RT_EOK;
     }
 }

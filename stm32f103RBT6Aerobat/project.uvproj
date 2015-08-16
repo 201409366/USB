@@ -416,6 +416,11 @@
               <FilePath>applications\appNRF24L01.c</FilePath>
             </File>
             <File>
+              <FileName>appTestMPU6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\appTestMPU6050.c</FilePath>
+            </File>
+            <File>
               <FileName>application.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\application.c</FilePath>

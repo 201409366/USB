@@ -11,7 +11,7 @@ rt_err_t appMachineInit(void){
 	
 	init_thread = rt_thread_create("appMachine",
 													 rt_appMachine_thread_entry, RT_NULL,
-													 2048, 7, 20);
+													 2048, 8, 20);
 	
 	if (init_thread != RT_NULL)
 		rt_thread_startup(init_thread);

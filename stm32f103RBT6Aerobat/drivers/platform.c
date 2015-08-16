@@ -115,7 +115,7 @@ void rt_platform_init(void)
 	
 #ifdef RT_USING_I2C
 		//rt_hw_i2c_init();
-		rt_hw_mpu6050_init("i2c1",MPU6050_DEFAULT_ADDRESS);
+	//	rt_hw_mpu6050_init("i2c1",0xD0);
 #endif /* RT_USING_I2C */	
 		
 }

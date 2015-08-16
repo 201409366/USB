@@ -45,7 +45,7 @@
 extern void rt_platform_init(void);
 extern rt_err_t appNRF24L01Init(void);
 extern rt_err_t appMachineInit(void);
-extern void appSensorInit(void);
+extern void appMpu6050Init(void);
 
 ALIGN(RT_ALIGN_SIZE)
 static rt_uint8_t led_stack[ 512 ];
@@ -172,7 +172,7 @@ void rt_init_thread_entry(void* parameter)
 #endif /* RT_USING_MACHINEAPP */		
 		
 		//appSensorInit();
-		
+		appMpu6050Init();
 		
 }
 

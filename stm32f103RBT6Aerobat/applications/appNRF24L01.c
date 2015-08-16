@@ -1,14 +1,16 @@
 #include "nRF24L01.h"
+#include <rtthread.h>
+#include "CommunicationProtocol.h"
 
-static char send_buffer[64];
+static uint8_t	rxbuf[32];
+static uint8_t	txbuf[32];
 
 void rt_appNRF24L01_thread_entry(void* parameter);
 
 rt_err_t appNRF24L01Init(void){
 	rt_err_t status;
 	rt_thread_t init_thread;
-	
-	//status = nRF24L01_init(spi_device_name);
+		
 	status = RF24L01_Check();
 	if(status == RT_EOK) {
 		init_thread = rt_thread_create("appNRF24L01",
@@ -25,13 +27,27 @@ rt_err_t appNRF24L01Init(void){
 }
 
 void rt_appNRF24L01_thread_entry(void* parameter) {
-	u8 status;	//用于判断接收/发送状态
-	u8 txbuf[TX_PLOAD_WIDTH]="01234567890123456789012345678901";	 //发送缓冲
-	rt_err_t result = RT_EOK;
+	
+	rt_err_t result = RT_ERROR;//RT_EOK;RT_ERROR
+	CommunicationProtocol cp;	
+	
+	while(1) {		
+		RF24L01_RX_Mode();
+		result = RF24l01_Rx_Dat(&rxbuf[0]);
+				
+		if(result == RT_EOK)
+		{
+			result = getProtocalData(&cp,&rxbuf[0]);		
+			if(result == RT_EOK)
+				rt_kprintf("%04X",cp.authentication);
+		}			
+		else
+			rt_thread_delay(RT_TICK_PER_SECOND);
+	}	
+}
 
-	while(1) {
-		
-//		result = rt_mq_recv(sendData_mq, &send_buffer, 32, RT_WAITING_FOREVER);
+
+//		result = rt_mq_recv(sendData_mq, &rxbuf, 32, RT_WAITING_FOREVER);
 //		if(result != RT_EOK) {
 //			rt_kprintf("recv mq error !");
 //			return;
@@ -58,7 +74,3 @@ void rt_appNRF24L01_thread_entry(void* parameter) {
 //				//rt_thread_delay(RT_TICK_PER_SECOND);
 //				break;  								
 //		}			  
-
-		rt_thread_delay(RT_TICK_PER_SECOND);
-	}	
-}

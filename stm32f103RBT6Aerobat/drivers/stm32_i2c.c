@@ -31,6 +31,7 @@
 //#define SCL_OUT() {GPIO_PORT_I2C_SCL->CRH&=0XFFF0FFFF;GPIO_PORT_I2C_SCL->CRH|=3<<16;}
 
 static struct rt_i2c_bus_device i2c_device;
+
 static uint8_t isSDAOut = 1;//1 out 0 in
 static uint8_t isSCLOut = 1;//1 out 0 in
 

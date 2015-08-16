@@ -6,10 +6,10 @@
 
 
 #define TX_ADR_WIDTH 	5  	//发射地址宽度
-#define TX_PLOAD_WIDTH  32   //发射数据通道有效数据宽度0~32Byte 
+#define TX_PLOAD_WIDTH  16   //发射数据通道有效数据宽度0~32Byte 
 
 #define RX_ADR_WIDTH    5
-#define RX_PLOAD_WIDTH  32
+#define RX_PLOAD_WIDTH  16
 
 #define CHANAL 0x20	//频道选择 
 
@@ -55,17 +55,18 @@
 #define RX_DR		0x40 //接收到数据中断标志位
 
 /* nRF24L01+引脚配置 */
-
+#define RF24L01_CSN_HIGH()      GPIO_SetBits(GPIOA, GPIO_Pin_4)
+#define RF24L01_CSN_LOW()      GPIO_ResetBits(GPIOA, GPIO_Pin_4)		 //csn置低
 #define RF24L01_CE_HIGH()	   GPIO_SetBits(GPIOB,GPIO_Pin_1)
 #define RF24L01_CE_LOW()	   GPIO_ResetBits(GPIOB,GPIO_Pin_1)			  //CE置低
 #define RF24L01_Read_IRQ()		GPIO_ReadInputDataBit ( GPIOB, GPIO_Pin_0) //中断引脚
 
 rt_err_t nRF24L01_init(const char * spi_device_name);
-u8 RF24L01_Check(void);
 void RF24L01_TX_Mode(void);
-u8 RF24L01_Tx_Dat(u8 *txbuf);
 void RF24L01_RX_Mode(void);
 u8 RF24l01_Rx_Dat(u8 *rxbuf);
+u8 RF24L01_Tx_Dat(u8 *txbuf);
+u8 RF24L01_Check(void); 
 
 #endif /* __SPI_RF24L01_H */
 

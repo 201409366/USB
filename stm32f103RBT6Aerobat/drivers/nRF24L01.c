@@ -299,10 +299,10 @@ u8 RF24l01_Rx_Dat(u8 *rxbuf)
 	{
 	  SPI_RF24L01_ReadBuf(RD_RX_PLOAD,rxbuf,RX_PLOAD_WIDTH);//读取数据
 	     SPI_RF24L01_WriteReg(FLUSH_RX,NOP);          //清除RX FIFO寄存器
-	  return RX_DR; 
+	  return RT_EOK; 
 	}
 	else    
-		return ERROR;                    //没收到任何数据
+		return RT_ERROR;                    //没收到任何数据
 }
 
 //-------------------------------------硬件部分--------------------------------------------------------------

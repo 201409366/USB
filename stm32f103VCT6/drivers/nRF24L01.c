@@ -16,11 +16,9 @@
 #endif /* #ifdef FLASH_DEBUG */
 
 static struct rt_spi_device * rt_spi_device;
-static struct rt_mutex lock;
 
-u8 TX_ADDRESS[TX_ADR_WIDTH] = {0x34,0x43,0x10,0x10,0x01}; // 定义一个静态发送地址
-u8 RX_ADDRESS[RX_ADR_WIDTH] = {0x34,0x43,0x10,0x10,0x01};
-
+static u8 TX_ADDRESS[TX_ADR_WIDTH] = {0x34,0x43,0x10,0x10,0x01}; // 定义一个静态发送地址
+static u8 RX_ADDRESS[RX_ADR_WIDTH] = {0x34,0x43,0x10,0x10,0x01};
 /*
  * 函数名：SPI_RF24L01_RW
  * 描述  ：用于向RF24L01读/写一字节数据
@@ -43,7 +41,7 @@ u8 SPI_RF24L01_RW(u8 dat)
 	u8 val;
 	
 	if(rt_spi_device != RT_NULL) 
-		val = rt_spi_sendrecv8(rt_spi_device,dat);
+		rt_spi_transfer(rt_spi_device,&dat,&val,1);
 	else
 		val = 0;
 	
@@ -60,22 +58,16 @@ u8 SPI_RF24L01_RW(u8 dat)
  */
 u8 SPI_RF24L01_WriteReg(u8 reg,u8 dat)
 {
- 	u8 status;
+ 	u8 sendBuff[2];
+	u8 recvBuff[2];
+	
 	 RF24L01_CE_LOW();
-	/*置低CSN，使能SPI传输*/
-//    RF24L01_CSN_LOW();
-				
-	/*发送命令及寄存器号 */
-	status = SPI_RF24L01_RW(reg);
-		 
-	 /*向寄存器写入数据*/
-    SPI_RF24L01_RW(dat); 
-	          
-	/*CSN拉高，完成*/	   
-//  	RF24L01_CSN_HIGH();	
-		
-	/*返回状态寄存器的值*/
-   	return(status);
+	
+	sendBuff[0] = reg;
+	sendBuff[1] = dat;
+	rt_spi_transfer(rt_spi_device,sendBuff,recvBuff,2);
+	
+  return recvBuff[0];
 }
 
 
@@ -89,20 +81,7 @@ u8 SPI_RF24L01_WriteReg(u8 reg,u8 dat)
 u8 SPI_RF24L01_ReadReg(u8 reg)
 {
  	u8 reg_val;
-
-	RF24L01_CE_LOW();
-	/*置低CSN，使能SPI传输*/
-// 	RF24L01_CSN_LOW();
-				
-  	 /*发送寄存器号*/
-	SPI_RF24L01_RW(reg); 
-
-	 /*读取寄存器的值 */
-	reg_val = SPI_RF24L01_RW(NOP);
-	            
-   	/*CSN拉高，完成*/
-//	RF24L01_CSN_HIGH();		
-   	
+	rt_spi_transfer(rt_spi_device,&reg,&reg_val,1);
 	return reg_val;
 }	
 
@@ -118,23 +97,18 @@ u8 SPI_RF24L01_ReadReg(u8 reg)
  */
 u8 SPI_RF24L01_ReadBuf(u8 reg,u8 *pBuf,u8 bytes)
 {
- 	u8 status, byte_cnt;
+ 	u8 sendBuff[64];
+	u8 recvBuff[64];
+	u8 i;
+	sendBuff[0] = reg;
+	
+	RF24L01_CE_LOW();
 
-	  RF24L01_CE_LOW();
-	/*置低CSN，使能SPI传输*/
-//	RF24L01_CSN_LOW();
+	rt_spi_transfer(rt_spi_device,sendBuff,recvBuff,bytes + 1);
+	for(i = 0; i < bytes; i ++)
+		*pBuf++ = recvBuff[1+ i];
 		
-	/*发送寄存器号*/		
-	status = SPI_RF24L01_RW(reg); 
-
- 	/*读取缓冲区数据*/
-	 for(byte_cnt=0;byte_cnt<bytes;byte_cnt++)		  
-	   pBuf[byte_cnt] = SPI_RF24L01_RW(NOP); //从RF24L01读取数据  
-
-	 /*CSN拉高，完成*/
-//	RF24L01_CSN_HIGH();	
-		
- 	return status;		//返回寄存器状态值
+ 	return recvBuff[0];		//返回寄存器状态值
 }
 
 
@@ -150,22 +124,19 @@ u8 SPI_RF24L01_ReadBuf(u8 reg,u8 *pBuf,u8 bytes)
  */
 u8 SPI_RF24L01_WriteBuf(u8 reg ,u8 *pBuf,u8 bytes)
 {
-	 u8 status,byte_cnt;
-	 RF24L01_CE_LOW();
-   	 /*置低CSN，使能SPI传输*/
-//	 RF24L01_CSN_LOW();			
+ 	u8 sendBuff[64];
+	u8 recvBuff[64];
+	u8 i;
+	
+	sendBuff[0] = reg;
+	for(i = 0; i < bytes; i++)
+		sendBuff[i+1] = *(pBuf + i);
+	
+	RF24L01_CE_LOW();
 
-	 /*发送寄存器号*/	
-  	 status = SPI_RF24L01_RW(reg); 
- 	
-  	  /*向缓冲区写入数据*/
-	 for(byte_cnt=0;byte_cnt<bytes;byte_cnt++)
-		SPI_RF24L01_RW(*pBuf++);	//写数据到缓冲区 	 
-	  	   
-	/*CSN拉高，完成*/
-//	RF24L01_CSN_HIGH();			
-  
-  	return (status);	//返回RF24L01的状态 		
+	rt_spi_transfer(rt_spi_device,sendBuff,recvBuff,bytes + 1);
+
+ 	return recvBuff[0];		//返回寄存器状态值
 }
 
 /*
@@ -195,9 +166,9 @@ u8 RF24L01_Check(void)
 	} 
 	       
 	if(i==5)
-		return SUCCESS ;        //MCU与void RF24L01_Init(void)成功连接 
+		return RT_EOK ;        //MCU与void RF24L01_Init(void)成功连接 
 	else
-		return ERROR ;        //MCU与void RF24L01_Init(void)不正常连接
+		return RT_ERROR ;        //MCU与void RF24L01_Init(void)不正常连接
 }
 
 /*
@@ -244,24 +215,20 @@ u8 RF24L01_Tx_Dat(u8 *txbuf)
 
 	 /*ce为低，进入待机模式1*/
 	RF24L01_CE_LOW();
-
 	/*写数据到TX BUF 最大 32个字节*/						
    SPI_RF24L01_WriteBuf(WR_TX_PLOAD,txbuf,TX_PLOAD_WIDTH);
-
       /*CE为高，txbuf非空，发送数据包 */   
  	 RF24L01_CE_HIGH();
-	  	
 	  /*等待发送完成中断 */                            
 	while(RF24L01_Read_IRQ()!=0); 	
-	
 	/*读取状态寄存器的值 */                              
 	state = SPI_RF24L01_ReadReg(STATUS);
-
 	 /*清除TX_DS或MAX_RT中断标志*/                  
 	SPI_RF24L01_WriteReg(RF24L01_WRITE_REG+STATUS,state); 	
-
 	SPI_RF24L01_WriteReg(FLUSH_TX,NOP);    //清除TX FIFO寄存器 
-
+	
+	RF24L01_CE_LOW();
+	
 	 /*判断中断类型*/    
 	if(state&MAX_RT)                     //达到最大重发次数
 			 return MAX_RT; 
@@ -332,22 +299,21 @@ u8 RF24l01_Rx_Dat(u8 *rxbuf)
 	{
 	  SPI_RF24L01_ReadBuf(RD_RX_PLOAD,rxbuf,RX_PLOAD_WIDTH);//读取数据
 	     SPI_RF24L01_WriteReg(FLUSH_RX,NOP);          //清除RX FIFO寄存器
-	  return RX_DR; 
+	  return RT_EOK; 
 	}
 	else    
-		return ERROR;                    //没收到任何数据
+		return RT_ERROR;                    //没收到任何数据
 }
 
 //-------------------------------------硬件部分--------------------------------------------------------------
 static void RF24L01_IO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
-  
- /*使能GPIOA,GPIOC,复用功能时钟*/
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+    
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 
   /*配置SPI_RF24L01_SPI的CE引脚，GPIOB^1*/
-   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_Init(GPIOB, &GPIO_InitStructure);
@@ -366,13 +332,6 @@ static void RF24L01_IO_Init(void)
 rt_err_t nRF24L01_init(const char * spi_device_name){
 	RF24L01_IO_Init();
 	
-		/* initialize mutex */
-	if (rt_mutex_init(&lock, spi_device_name, RT_IPC_FLAG_FIFO) != RT_EOK)
-	{
-			rt_kprintf("init nRF24L01 lock mutex failed\n");
-			return -RT_ENOSYS;
-	}
-
 	rt_spi_device = (struct rt_spi_device *)rt_device_find(spi_device_name);
 	if(rt_spi_device == RT_NULL)
 	{
@@ -385,24 +344,32 @@ rt_err_t nRF24L01_init(const char * spi_device_name){
 			struct rt_spi_configuration cfg;
 			cfg.data_width = 8;
 			cfg.mode = RT_SPI_MODE_0 | RT_SPI_MSB; /* SPI Compatible: Mode 0 and Mode 3 */
-			cfg.max_hz = 9 * 1000 * 1000; /* 10M */
+			cfg.max_hz = 9 * 1000 * 1000; /* 9M */
+			//cfg.max_hz = 50 * 1000 * 1000; /* 9M */
 			rt_spi_configure(rt_spi_device, &cfg);
 	}
-	return	RT_EOK;
+//	SPI_RF24L01_RW(0x5a);	
+	
+	if(RF24L01_Check() == RT_EOK) {
+		//这里直接启一个线程来处理相关数据。
+		rt_kprintf("nRF24L01 is connected !\n");
+		return	RT_EOK;
+	}	else {
+		rt_kprintf("nRF24L01 is not connected !\n");
+		return RT_ERROR ;        //MCU与void RF24L01_Init(void)不正常连接		
+	}
+	
 }
 
+//#ifdef RT_USING_FINSH
+//#include <finsh.h>
 
-#ifdef RT_USING_FINSH
-#include <finsh.h>
-
-
-
-u8 spiTest(u8 value)
-{
-	return SPI_RF24L01_RW(value);
-}
-FINSH_FUNCTION_EXPORT(spiTest, send then recv a byte.)
-//FINSH_FUNCTION_EXPORT_ALIAS(led, ld, set led[0 - 1] on[1] or off[0].)
-//FINSH_VAR_EXPORT(led_inited, finsh_type_uchar, just a led_inited for test)
-#endif
+//u8 spiTest(u8 value)
+//{
+//	return SPI_RF24L01_RW(value);
+//}
+//FINSH_FUNCTION_EXPORT(spiTest, send then recv a byte.)
+////FINSH_FUNCTION_EXPORT_ALIAS(led, ld, set led[0 - 1] on[1] or off[0].)
+////FINSH_VAR_EXPORT(led_inited, finsh_type_uchar, just a led_inited for test)
+//#endif
 

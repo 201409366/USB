@@ -143,7 +143,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name></Name>
+          <Name>/</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -171,7 +171,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>drivers\drv_mpu6050.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\rtthread_stm32\drivers/drv_mpu6050.c\212</Expression>
+          <Expression></Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
@@ -187,7 +187,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\..\components\drivers\i2c\i2c_core.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\rtthread_stm32\../../components/drivers/i2c/i2c_core.c\77</Expression>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>
@@ -438,7 +438,7 @@
       <Focus>0</Focus>
       <ColumnNumber>32</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>195</TopLine>
+      <TopLine>194</TopLine>
       <CurrentLine>207</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>drivers\drv_mpu6050.c</PathWithFileName>
@@ -452,10 +452,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>44</ColumnNumber>
+      <ColumnNumber>51</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>94</TopLine>
-      <CurrentLine>111</CurrentLine>
+      <TopLine>250</TopLine>
+      <CurrentLine>410</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>drivers\stm32_i2c.c</PathWithFileName>
       <FilenameWithoutPath>stm32_i2c.c</FilenameWithoutPath>
@@ -918,7 +918,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>171</TopLine>
+      <TopLine>172</TopLine>
       <CurrentLine>189</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\src\device.c</PathWithFileName>
@@ -934,8 +934,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>76</TopLine>
-      <CurrentLine>84</CurrentLine>
+      <TopLine>85</TopLine>
+      <CurrentLine>87</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\src\idle.c</PathWithFileName>
       <FilenameWithoutPath>idle.c</FilenameWithoutPath>
@@ -1174,7 +1174,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>58</TopLine>
+      <TopLine>68</TopLine>
       <CurrentLine>77</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\components\drivers\i2c\i2c_core.c</PathWithFileName>
@@ -1190,7 +1190,7 @@
       <Focus>0</Focus>
       <ColumnNumber>29</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>25</TopLine>
+      <TopLine>92</TopLine>
       <CurrentLine>119</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\components\drivers\i2c\i2c_dev.c</PathWithFileName>
@@ -1204,10 +1204,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>21</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>390</TopLine>
-      <CurrentLine>442</CurrentLine>
+      <TopLine>46</TopLine>
+      <CurrentLine>60</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\components\drivers\i2c\i2c-bit-ops.c</PathWithFileName>
       <FilenameWithoutPath>i2c-bit-ops.c</FilenameWithoutPath>

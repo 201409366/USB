@@ -20,19 +20,50 @@
 #define GPIO_PORT_I2C_SDA   GPIOC
 #define PIN_I2C_SDA		    GPIO_Pin_11
 
-//IO方向设置
-#define SDA_IN()  {GPIO_PORT_I2C_SDA->CRH&=0XFFFF0FFF;GPIO_PORT_I2C_SDA->CRH|=8<<12;}
-//上拉/下拉 输入
+////IO方向设置
+//#define SDA_IN()  {GPIO_PORT_I2C_SDA->CRH&=0XFFFF0FFF;GPIO_PORT_I2C_SDA->CRH|=8<<12;}
+////上拉/下拉 输入
 
-#define SDA_OUT() {GPIO_PORT_I2C_SDA->CRH&=0XFFFF0FFF;GPIO_PORT_I2C_SDA->CRH|=3<<12;}
-//
+//#define SDA_OUT() {GPIO_PORT_I2C_SDA->CRH&=0XFFFF0FFF;GPIO_PORT_I2C_SDA->CRH|=3<<12;}
+////
 
-#define SCL_IN()  {GPIO_PORT_I2C_SCL->CRH&=0XFFF0FFFF;GPIO_PORT_I2C_SCL->CRH|=8<<16;}
-#define SCL_OUT() {GPIO_PORT_I2C_SCL->CRH&=0XFFF0FFFF;GPIO_PORT_I2C_SCL->CRH|=3<<16;}
+//#define SCL_IN()  {GPIO_PORT_I2C_SCL->CRH&=0XFFF0FFFF;GPIO_PORT_I2C_SCL->CRH|=8<<16;}
+//#define SCL_OUT() {GPIO_PORT_I2C_SCL->CRH&=0XFFF0FFFF;GPIO_PORT_I2C_SCL->CRH|=3<<16;}
 
 static struct rt_i2c_bus_device i2c_device;
 static uint8_t isSDAOut = 1;//1 out 0 in
 static uint8_t isSCLOut = 1;//1 out 0 in
+
+static void SDA_IN(void)
+{
+	
+		GPIO_InitTypeDef GPIO_InitStructure;
+	
+		GPIO_InitStructure.GPIO_Pin = PIN_I2C_SDA ;			
+		GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_IN_FLOATING;  	// 浮空输入
+		GPIO_Init(GPIO_PORT_I2C_SCL, &GPIO_InitStructure);				     	// 选择C端口
+		
+}
+
+static void SDA_OUT(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+	
+	GPIO_InitStructure.GPIO_Pin = PIN_I2C_SDA ;			
+	GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_Out_OD;		  	// 开漏输出
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 	// 最高输出速率50MHz
+	GPIO_Init(GPIO_PORT_I2C_SCL, &GPIO_InitStructure);				 	    // 选择C端口
+}
+
+static void SCL_IN(void)
+{
+	
+}
+
+static void SCL_OUT(void)
+{
+	
+}
 
 static void gpio_set_sda(void *data, rt_int32_t state)
 {
@@ -376,13 +407,13 @@ rt_err_t rt_hw_i2c_init(void)
 		RCC_APB2PeriphClockCmd( RCC_I2C_SCL , ENABLE  );
 		GPIO_InitStructure.GPIO_Pin =  PIN_I2C_SCL;
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;  
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;  
 		GPIO_Init(GPIO_PORT_I2C_SCL, &GPIO_InitStructure);
 	
 		RCC_APB2PeriphClockCmd( RCC_I2C_SDA , ENABLE  );	
 		GPIO_InitStructure.GPIO_Pin =  PIN_I2C_SDA;
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
 		GPIO_Init(GPIO_PORT_I2C_SDA, &GPIO_InitStructure);
 
     GPIO_SetBits(GPIO_PORT_I2C_SDA, PIN_I2C_SDA);
@@ -421,8 +452,9 @@ rt_err_t rt_hw_i2c_init(void)
 		I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
 		I2C_InitStructure.I2C_ClockSpeed = 100000;  /* 100K速度 */
 		
-		I2C_Cmd(I2C1, ENABLE);
 		I2C_Init(I2C1, &I2C_InitStructure);
+		
+		I2C_Cmd(I2C1, ENABLE);		
 		/*允许1字节1应答模式*/
 		I2C_AcknowledgeConfig(I2C1, ENABLE);
 
@@ -433,3 +465,5 @@ rt_err_t rt_hw_i2c_init(void)
 
 #endif
 }
+
+INIT_BOARD_EXPORT(rt_hw_i2c_init);

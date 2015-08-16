@@ -12,16 +12,6 @@
 #define GPIO_PORT_I2C_SDA   GPIOB
 #define PIN_I2C_SDA		      GPIO_Pin_7
 
-//IO方向设置
-#define SDA_IN()  {GPIO_PORT_I2C_SDA->CRL&=0X0FFFFFFF;GPIO_PORT_I2C_SDA->CRL|=0X8FFFFFFF;}
-//上拉/下拉 输入
-
-#define SDA_OUT() {GPIO_PORT_I2C_SDA->CRL&=0X0FFFFFFF;GPIO_PORT_I2C_SDA->CRL|=0X3FFFFFFF;}
-//
-
-#define SCL_IN()  {GPIO_PORT_I2C_SCL->CRL&=0XF0FFFFFF;GPIO_PORT_I2C_SCL->CRL|=0XF8FFFFFF;}
-#define SCL_OUT() {GPIO_PORT_I2C_SCL->CRL&=0XF0FFFFFF;GPIO_PORT_I2C_SCL->CRL|=0XF3FFFFFF;}
-
 //#define RCC_I2C_SCL         RCC_APB2Periph_GPIOC
 //#define GPIO_PORT_I2C_SCL   GPIOC
 //#define PIN_I2C_SCL		    GPIO_Pin_12
@@ -43,6 +33,37 @@
 static struct rt_i2c_bus_device i2c_device;
 static uint8_t isSDAOut = 1;//1 out 0 in
 static uint8_t isSCLOut = 1;//1 out 0 in
+
+static void SDA_IN(void)
+{
+	
+		GPIO_InitTypeDef GPIO_InitStructure;
+	
+		GPIO_InitStructure.GPIO_Pin = PIN_I2C_SDA ;			
+		GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_IN_FLOATING;  	// 浮空输入
+		GPIO_Init(GPIO_PORT_I2C_SCL, &GPIO_InitStructure);				     	// 选择C端口
+		
+}
+
+static void SDA_OUT(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+	
+	GPIO_InitStructure.GPIO_Pin = PIN_I2C_SDA ;			
+	GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_Out_OD;		  	// 开漏输出
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 	// 最高输出速率50MHz
+	GPIO_Init(GPIO_PORT_I2C_SCL, &GPIO_InitStructure);				 	    // 选择C端口
+}
+
+static void SCL_IN(void)
+{
+	
+}
+
+static void SCL_OUT(void)
+{
+	
+}
 
 static void gpio_set_sda(void *data, rt_int32_t state)
 {
@@ -386,13 +407,13 @@ rt_err_t rt_hw_i2c_init(void)
 		RCC_APB2PeriphClockCmd( RCC_I2C_SCL , ENABLE  );
 		GPIO_InitStructure.GPIO_Pin =  PIN_I2C_SCL;
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;  
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;  
 		GPIO_Init(GPIO_PORT_I2C_SCL, &GPIO_InitStructure);
 	
 		RCC_APB2PeriphClockCmd( RCC_I2C_SDA , ENABLE  );	
 		GPIO_InitStructure.GPIO_Pin =  PIN_I2C_SDA;
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
 		GPIO_Init(GPIO_PORT_I2C_SDA, &GPIO_InitStructure);
 
     GPIO_SetBits(GPIO_PORT_I2C_SDA, PIN_I2C_SDA);

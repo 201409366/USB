@@ -61,7 +61,8 @@
 #define RF24L01_CE_LOW()	   GPIO_ResetBits(GPIOB,GPIO_Pin_1)			  //CEÖÃµÍ
 #define RF24L01_Read_IRQ()		GPIO_ReadInputDataBit ( GPIOB, GPIO_Pin_0) //ÖÐ¶ÏÒý½Å
 
-rt_err_t nRF24L01_init(const char * spi_device_name);
+rt_err_t rt_hw_nRF24L01_init(const char * spi_device_name);
+
 void RF24L01_TX_Mode(void);
 void RF24L01_RX_Mode(void);
 u8 RF24l01_Rx_Dat(u8 *rxbuf);

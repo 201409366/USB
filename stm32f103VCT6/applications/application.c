@@ -145,6 +145,8 @@ void rt_init_thread_entry(void* parameter)
         calibration_init();
     }
 #endif /* #ifdef RT_USING_RTGUI */
+		
+		app2401Init();
 }
 
 int rt_application_init(void)

@@ -9,9 +9,6 @@
 		#include "nRF24L01.h"
 #endif /* RT_USING_NRF24L01 */	
 
-
-extern rt_err_t rt_hw_i2c_init(void);
-
 static void rt_hw_spi_init(void)
 {
 		GPIO_InitTypeDef GPIO_InitStructure;
@@ -110,7 +107,7 @@ void rt_platform_init(void)
 #endif  /* RT_USING_DFS */
 
 #ifdef RT_USING_NRF24L01
-		nRF24L01_init("nRF24L01");
+		rt_hw_nRF24L01_init("nRF24L01");
 #endif /* RT_USING_NRF24L01 */	
 	
 #ifdef RT_USING_I2C

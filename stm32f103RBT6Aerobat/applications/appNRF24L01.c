@@ -7,7 +7,8 @@ static uint8_t	txbuf[32];
 
 void rt_appNRF24L01_thread_entry(void* parameter);
 
-rt_err_t appNRF24L01Init(void){
+rt_err_t appNRF24L01Init(void)
+{
 	rt_err_t status;
 	rt_thread_t init_thread;
 		

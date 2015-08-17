@@ -193,7 +193,7 @@ int rt_application_init(void)
                             5);
     if (result == RT_EOK)
     {
-        rt_thread_startup(&led_thread);
+        //rt_thread_startup(&led_thread);
     }
 
 #if (RT_THREAD_PRIORITY_MAX == 32)

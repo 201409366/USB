@@ -5,11 +5,10 @@
 
 static void app_2401_thread_entry(void* parameter)
 {
-	u8 status;	
+	u8 status = RT_EOK;	
 	u8 txbuf[TX_PLOAD_WIDTH]="yz01234567890123";
-	rt_err_t result = RT_EOK;
 
-	status = nRF24L01_init("nRF24L01");
+	//status = nRF24L01_init("nRF24L01");
 	if(status == RT_EOK) 
 	{
 		while(1) {
@@ -35,12 +34,15 @@ static void app_2401_thread_entry(void* parameter)
 
 }
 
-void rt_hw_2401_init(void) {
+rt_err_t app2401Init(void)
+{
 	rt_thread_t tid;
 	tid = rt_thread_create("2401",
 												 app_2401_thread_entry, RT_NULL,
 												 2048, 8, 20);
 	if (tid != RT_NULL)
         rt_thread_startup(tid);
+	
+	return RT_EOK;
 }
 

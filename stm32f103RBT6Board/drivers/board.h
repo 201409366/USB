@@ -50,6 +50,8 @@
 
 #define RT_USING_USARTAPP
 
+// #define RT_USING_24C02
+
 void rt_hw_board_init(void);
 
 #endif /* __BOARD_H__ */

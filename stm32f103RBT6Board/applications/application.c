@@ -156,7 +156,9 @@ void rt_init_thread_entry(void* parameter)
 		appUsartInit();	
 #endif /* RT_USING_USARTAPP */		
 
-			app24C02Init();
+#ifdef RT_USING_24C02
+		app24C02Init();
+#endif /* RT_USING_USARTAPP */		
 		
 }
 

@@ -110,7 +110,7 @@ void rt_platform_init(void)
 #endif  /* RT_USING_DFS */
 
 #ifdef RT_USING_NRF24L01
-		nRF24L01_init("nRF24L01");
+		rt_hw_nRF24L01_init("nRF24L01");		
 #endif /* RT_USING_NRF24L01 */	
 
 #ifdef RT_USING_I2C	

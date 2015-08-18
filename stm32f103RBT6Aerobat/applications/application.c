@@ -40,48 +40,12 @@
 #include <rtgui/calibration.h>
 #endif
 
-#include "led.h"
-
 extern void rt_platform_init(void);
 extern rt_err_t appNRF24L01Init(void);
 extern rt_err_t appMachineInit(void);
 extern void appMpu6050Init(void);
-
-ALIGN(RT_ALIGN_SIZE)
-static rt_uint8_t led_stack[ 512 ];
-static struct rt_thread led_thread;
-static void led_thread_entry(void* parameter)
-{
-
-#ifndef RT_USING_FINSH
-		unsigned int count=0;
-#endif
-
-
-    rt_hw_led_init();
-
-    while (1)
-    {
-        /* led1 on */
-#ifndef RT_USING_FINSH
-        rt_kprintf("led on, count : %d\r\n",count);
-			  count++;
-#endif
-     
-        rt_hw_led_on(1);
-        rt_thread_delay( RT_TICK_PER_SECOND/2 ); /* sleep 0.5 second and switch to other thread */
-
-        /* led1 off */
-#ifndef RT_USING_FINSH
-        rt_kprintf("led off\r\n");
-#endif
-        rt_hw_led_off(1);
-        rt_thread_delay( RT_TICK_PER_SECOND/2 );
-			
-				//accel_test(0,0);
-			
-    }
-}
+extern void appManagerInit(void);
+extern void appLEDInit(void);
 
 #ifdef RT_USING_RTGUI
 rt_bool_t cali_setup(void)
@@ -170,31 +134,24 @@ void rt_init_thread_entry(void* parameter)
 #ifdef RT_USING_MACHINEAPP
 		appMachineInit();
 #endif /* RT_USING_MACHINEAPP */		
-		
-		//appSensorInit();
+
+#ifdef RT_USING_MPU6050APP
 		appMpu6050Init();
-		
+#endif /* RT_USING_MACHINEAPP */		
+
+#ifdef RT_USING_MANAGERAPP
+		appManagerInit();
+#endif /* RT_USING_MACHINEAPP */				
+
+#ifdef RT_USING_LEDAPP
+		appLEDInit();
+#endif /* RT_USING_MACHINEAPP */	
+
 }
 
 int rt_application_init(void)
 {
     rt_thread_t init_thread;
-
-    rt_err_t result;
-
-    /* init led thread */
-    result = rt_thread_init(&led_thread,
-                            "led",
-                            led_thread_entry,
-                            RT_NULL,
-                            (rt_uint8_t*)&led_stack[0],
-                            sizeof(led_stack),
-                            20,
-                            5);
-    if (result == RT_EOK)
-    {
-        //rt_thread_startup(&led_thread);
-    }
 
 #if (RT_THREAD_PRIORITY_MAX == 32)
     init_thread = rt_thread_create("init",

@@ -51,7 +51,7 @@ static rt_uint8_t mpu6050_test(void)
         gyro_z = ((mpu_data[12] << 8) | mpu_data[13]);
         rt_kprintf("acc_xyz:%d,%d,%d\n", acc_x, acc_y, acc_z);
         rt_kprintf("gyro_xyz:%d,%d,%d\n", gyro_x, gyro_y, gyro_z);
-        rt_thread_delay(100);
+        rt_thread_delay(6000);
     }
     //return 0 ;
 }
@@ -59,7 +59,7 @@ static rt_uint8_t mpu6050_test(void)
 void rt_appMpu6050_thread_entry(void* parameter) {
 
 	while(1) {
-	//	mpu6050_test();
-		rt_thread_delay(3000);
+		mpu6050_test();
+		rt_thread_delay(6000);
 	}	
 }

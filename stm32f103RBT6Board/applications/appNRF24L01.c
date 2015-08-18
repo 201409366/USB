@@ -1,7 +1,7 @@
 #include "nRF24L01.h"
 
 extern rt_mq_t sendData_mq;
-static char send_buffer[64];
+static unsigned char send_buffer[TX_PLOAD_WIDTH * 2];
 
 void rt_appNRF24L01_thread_entry(void* parameter);
 
@@ -26,13 +26,12 @@ rt_err_t appNRF24L01Init(void){
 }
 
 void rt_appNRF24L01_thread_entry(void* parameter) {
-	u8 status;	//ÓÃÓÚÅĞ¶Ï½ÓÊÕ/·¢ËÍ×´Ì¬
-	u8 txbuf[TX_PLOAD_WIDTH]="01234567890123456789012345678901";	 //·¢ËÍ»º³å
+	u8 status;	//ç”¨äºåˆ¤æ–­æ¥æ”¶/å‘é€çŠ¶æ€	
 	rt_err_t result = RT_EOK;
 
 	while(1) {
 		
-		result = rt_mq_recv(sendData_mq, &send_buffer, 32, RT_WAITING_FOREVER);
+		result = rt_mq_recv(sendData_mq, &send_buffer[0], TX_PLOAD_WIDTH, RT_WAITING_FOREVER);
 		if(result != RT_EOK) {
 			rt_kprintf("recv mq error !");
 			return;
@@ -40,10 +39,10 @@ void rt_appNRF24L01_thread_entry(void* parameter) {
 			
 		
 		RF24L01_TX_Mode();
-		/*¿ªÊ¼·¢ËÍÊı¾İ*/	
-		status = RF24L01_Tx_Dat(txbuf);
+		/*å¼€å§‹å‘é€æ•°æ®*/	
+		status = RF24L01_Tx_Dat(&send_buffer[0]);
 		
-		/*ÅĞ¶Ï·¢ËÍ×´Ì¬*/
+		/*åˆ¤æ–­å‘é€çŠ¶æ€*/
 		switch(status)
 		{
 			case MAX_RT:

@@ -1,4 +1,5 @@
 #include <stm32f10x.h>
+#include "machine.h"
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -101,4 +102,21 @@ void rt_hw_machine_init(void) {
 		TIM_Cmd(TIM2, ENABLE);
 	}
 	
+}
+
+void rt_hw_setMathine1PWM(rt_uint8_t pwm)
+{
+	rt_kprintf("set machine 1 pwm = %d",pwm);
+}
+void rt_hw_setMathine2PWM(rt_uint8_t pwm)
+{
+	rt_kprintf("set machine 2 pwm = %d",pwm);
+}
+void rt_hw_setMathine3PWM(rt_uint8_t pwm)
+{
+	rt_kprintf("set machine 3 pwm = %d",pwm);
+}
+void rt_hw_setMathine4PWM(rt_uint8_t pwm)
+{
+	rt_kprintf("set machine 4 pwm = %d",pwm);
 }

@@ -1,5 +1,6 @@
 #include <board.h>
 #include <rtthread.h>
+#include "nRF24L01.h"
 
 /* UART接收消息结构*/
 struct rx_msg
@@ -13,10 +14,11 @@ struct rx_msg msg;
 rt_mq_t sendData_mq;
 
 /* 接收线程的接收缓冲区*/
-static char uart_rx_buffer[64];
+static char uart_rx_buffer[TX_PLOAD_WIDTH * 2];
 
 /* 用于等待数据 */
 static rt_sem_t sem = RT_NULL;
+static uint8_t bufferCounts;
 
 void rt_appUsart_thread_entry(void* parameter);
 
@@ -32,7 +34,7 @@ rt_err_t uart_input(rt_device_t dev, rt_size_t size)
 
 rt_err_t appUsartInit(void){
 	rt_thread_t init_thread;
-		
+	bufferCounts = 0;	
 	init_thread = rt_thread_create("appUsart",
 														 rt_appUsart_thread_entry, RT_NULL,
 														 2048, 7, 20);
@@ -49,10 +51,10 @@ void rt_appUsart_thread_entry(void* parameter) {
 	
 		/* 创建一个信号量，初始值是0 */
 	sem = rt_sem_create("usartSem", 0, RT_IPC_FLAG_FIFO);
-	sendData_mq = rt_mq_create("usartMQ",32,4,RT_IPC_FLAG_FIFO);
+	sendData_mq = rt_mq_create("usartMQ",TX_PLOAD_WIDTH,4,RT_IPC_FLAG_FIFO);
 	
 	/* 查找系统中的串口1设备*/
-	device = rt_device_find("uart2");
+	device = rt_device_find("uart1");
 	if (device!= RT_NULL)
 	{
 		/* 设置回调函数及打开设备*/
@@ -76,11 +78,16 @@ void rt_appUsart_thread_entry(void* parameter) {
 			rt_uint32_t rx_length;
 			rx_length = (sizeof(uart_rx_buffer) - 1) > msg.size ? msg.size : sizeof(uart_rx_buffer) - 1;
 			/* 读取消息*/
-			rx_length = rt_device_read(msg.dev, 0, &uart_rx_buffer[0],rx_length);
-			uart_rx_buffer[rx_length] = '\0';
-			
-			/* 发送消息，等待nRF24L01读取*/			
-			rt_mq_send(sendData_mq, uart_rx_buffer, rx_length);			
+			rx_length = rt_device_read(msg.dev, 0, &uart_rx_buffer[bufferCounts],rx_length);
+			if(rx_length != 0) 
+			{
+				bufferCounts += rx_length;
+				if(bufferCounts == TX_PLOAD_WIDTH)						
+				{	/* 发送消息，等待nRF24L01读取*/			
+					rt_mq_send(sendData_mq, uart_rx_buffer, TX_PLOAD_WIDTH);
+					bufferCounts = 0;
+				}					
+			}
 		}
 	}
 }

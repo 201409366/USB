@@ -8,8 +8,8 @@
 #define TX_ADR_WIDTH 	5  	//发射地址宽度
 #define TX_PLOAD_WIDTH  16   //发射数据通道有效数据宽度0~32Byte 
 
-#define RX_ADR_WIDTH    5
-#define RX_PLOAD_WIDTH  16
+#define RX_ADR_WIDTH    TX_ADR_WIDTH
+#define RX_PLOAD_WIDTH  TX_PLOAD_WIDTH
 
 #define CHANAL 0x20	//频道选择 
 

@@ -22,8 +22,19 @@
 
 #define led2_rcc                    RCC_APB2Periph_GPIOC
 #define led2_gpio                   GPIOC
-#define led2_pin                    (GPIO_Pin_4|GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_8)
+#define led2_pin                    (GPIO_Pin_4)
 
+#define led3_rcc                    RCC_APB2Periph_GPIOC
+#define led3_gpio                   GPIOC
+#define led3_pin                    (GPIO_Pin_5)
+
+#define led4_rcc                    RCC_APB2Periph_GPIOC
+#define led4_gpio                   GPIOC
+#define led4_pin                    (GPIO_Pin_6)
+
+#define led5_rcc                    RCC_APB2Periph_GPIOC
+#define led5_gpio                   GPIOC
+#define led5_pin                    (GPIO_Pin_8)
 
 void rt_hw_led_init(void)
 {
@@ -37,7 +48,7 @@ void rt_hw_led_init(void)
     GPIO_InitStructure.GPIO_Pin   = led1_pin;
     GPIO_Init(led1_gpio, &GPIO_InitStructure);
 
-    GPIO_InitStructure.GPIO_Pin   = led2_pin;
+    GPIO_InitStructure.GPIO_Pin   = led2_pin | led3_pin| led4_pin| led5_pin;
     GPIO_Init(led2_gpio, &GPIO_InitStructure);
 	
 }
@@ -52,6 +63,16 @@ void rt_hw_led_on(rt_uint32_t n)
     case 1:
         GPIO_SetBits(led2_gpio, led2_pin);
         break;
+    case 2:
+        GPIO_SetBits(led3_gpio, led3_pin);
+        break;
+    case 3:
+        GPIO_SetBits(led4_gpio, led4_pin);
+        break;
+    case 4:
+        GPIO_SetBits(led5_gpio, led5_pin);
+        break;
+
     default:
         break;
     }
@@ -66,6 +87,15 @@ void rt_hw_led_off(rt_uint32_t n)
         break;
     case 1:
         GPIO_ResetBits(led2_gpio, led2_pin);
+        break;
+    case 2:
+        GPIO_ResetBits(led3_gpio, led3_pin);
+        break;		
+    case 3:
+        GPIO_ResetBits(led4_gpio, led4_pin);
+        break;
+    case 4:
+        GPIO_ResetBits(led5_gpio, led5_pin);
         break;
     default:
         break;

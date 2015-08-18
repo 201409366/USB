@@ -48,10 +48,14 @@
 //#define RT_USING_W25QXX
 #define RT_USING_NRF24L01
 
-
 //#define RT_USING_USARTAPP
 
 #define RT_USING_MACHINEAPP
+
+#define RT_USING_MPU6050APP
+
+#define RT_USING_MANAGERAPP
+#define RT_USING_LEDAPP
 
 void rt_hw_board_init(void);
 

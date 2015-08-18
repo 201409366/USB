@@ -2,8 +2,10 @@
 #include <rtthread.h>
 #include "CommunicationProtocol.h"
 
-static uint8_t	rxbuf[32];
-static uint8_t	txbuf[32];
+static uint8_t	rxbuf[TX_PLOAD_WIDTH * 2];
+static uint8_t	txbuf[TX_PLOAD_WIDTH * 2];
+
+extern rt_mq_t protocalData_mq;
 
 void rt_appNRF24L01_thread_entry(void* parameter);
 
@@ -39,8 +41,10 @@ void rt_appNRF24L01_thread_entry(void* parameter) {
 		if(result == RT_EOK)
 		{
 			result = getProtocalData(&cp,&rxbuf[0]);		
-			if(result == RT_EOK)
-				rt_kprintf("%04X",cp.authentication);
+			if(result == RT_EOK){
+				//rt_kprintf("%04X",cp.authentication);
+				rt_mq_send(protocalData_mq, &cp, sizeof(CommunicationProtocol));				
+			}				
 		}			
 		else
 			rt_thread_delay(RT_TICK_PER_SECOND);

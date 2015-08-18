@@ -254,7 +254,7 @@ void RF24L01_RX_Mode(void)
 
 	SPI_RF24L01_WriteBuf(RF24L01_WRITE_REG+RX_ADDR_P0,RX_ADDRESS,RX_ADR_WIDTH);//写RX节点地址
 
-	SPI_RF24L01_WriteReg(RF24L01_WRITE_REG+EN_AA,0x00);    //使能通道0的自动应答    
+	SPI_RF24L01_WriteReg(RF24L01_WRITE_REG+EN_AA,0x01);    //使能通道0的自动应答    
 
 	SPI_RF24L01_WriteReg(RF24L01_WRITE_REG+EN_RXADDR,0x01);//使能通道0的接收地址    
 
@@ -330,7 +330,7 @@ static void RF24L01_IO_Init(void)
 /*
 	主要在SPI BUS上面附加一个SPI设备，建立通信。接下来需要实现发送和接收。
 */
-rt_err_t nRF24L01_init(const char * spi_device_name){
+rt_err_t rt_hw_nRF24L01_init(const char * spi_device_name){
 	RF24L01_IO_Init();
 	
 	rt_spi_device = (struct rt_spi_device *)rt_device_find(spi_device_name);

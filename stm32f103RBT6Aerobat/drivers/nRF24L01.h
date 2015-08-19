@@ -1,19 +1,19 @@
-#ifndef __SPI_RF24L01_H
+ï»¿#ifndef __SPI_RF24L01_H
 #define __SPI_RF24L01_H
 
 #include "stm32f10x.h"
 #include <rtthread.h>
 
 
-#define TX_ADR_WIDTH 	5  	//·¢ÉäµØÖ·¿í¶È
-#define TX_PLOAD_WIDTH  16   //·¢ÉäÊı¾İÍ¨µÀÓĞĞ§Êı¾İ¿í¶È0~32Byte 
+#define TX_ADR_WIDTH 	5  	//å‘å°„åœ°å€å®½åº¦
+#define TX_PLOAD_WIDTH  16   //å‘å°„æ•°æ®é€šé“æœ‰æ•ˆæ•°æ®å®½åº¦0~32Byte 
 
 #define RX_ADR_WIDTH    TX_ADR_WIDTH
 #define RX_PLOAD_WIDTH  TX_PLOAD_WIDTH
 
-#define CHANAL 0x20	//ÆµµÀÑ¡Ôñ 
+#define CHANAL 0x20	//é¢‘é“é€‰æ‹© 
 
-// SPI(nRF24L01) commands ,	RF24L01µÄSPIÃüÁîºê¶¨Òå£¬Ïê¼ûNRF¹¦ÄÜÊ¹ÓÃÎÄµµ
+// SPI(nRF24L01) commands ,	RF24L01çš„SPIå‘½ä»¤å®å®šä¹‰ï¼Œè¯¦è§NRFåŠŸèƒ½ä½¿ç”¨æ–‡æ¡£
 #define RF24L01_READ_REG    0x00  // Define read command to register
 #define RF24L01_WRITE_REG   0x20  // Define write command to register
 #define RD_RX_PLOAD 0x61  // Define RX payload register address
@@ -23,7 +23,7 @@
 #define REUSE_TX_PL 0xE3  // Define reuse TX payload register command
 #define NOP         0xFF  // Define No Operation, might be used to read status register
 
-// SPI(nRF24L01) registers(addresses) £¬RF24L01 Ïà¹Ø¼Ä´æÆ÷µØÖ·µÄºê¶¨Òå
+// SPI(nRF24L01) registers(addresses) ï¼ŒRF24L01 ç›¸å…³å¯„å­˜å™¨åœ°å€çš„å®å®šä¹‰
 #define CONFIG      0x00  // 'Config' register address
 #define EN_AA       0x01  // 'Enable Auto Acknowledgment' register address
 #define EN_RXADDR   0x02  // 'Enabled RX addresses' register address
@@ -49,17 +49,17 @@
 #define RX_PW_P5    0x16  // 'RX payload width, pipe5' register address
 #define FIFO_STATUS 0x17  // 'FIFO Status Register' register address
 
-#define MAX_RT      0x10 //´ïµ½×î´óÖØ·¢´ÎÊıÖĞ¶Ï±êÖ¾Î»
-#define TX_DS		0x20 //·¢ËÍÍê³ÉÖĞ¶Ï±êÖ¾Î»	  // 
+#define MAX_RT      0x10 //è¾¾åˆ°æœ€å¤§é‡å‘æ¬¡æ•°ä¸­æ–­æ ‡å¿—ä½
+#define TX_DS		0x20 //å‘é€å®Œæˆä¸­æ–­æ ‡å¿—ä½	  // 
 
-#define RX_DR		0x40 //½ÓÊÕµ½Êı¾İÖĞ¶Ï±êÖ¾Î»
+#define RX_DR		0x40 //æ¥æ”¶åˆ°æ•°æ®ä¸­æ–­æ ‡å¿—ä½
 
-/* nRF24L01+Òı½ÅÅäÖÃ */
+/* nRF24L01+å¼•è„šé…ç½® */
 #define RF24L01_CSN_HIGH()      GPIO_SetBits(GPIOA, GPIO_Pin_4)
-#define RF24L01_CSN_LOW()      GPIO_ResetBits(GPIOA, GPIO_Pin_4)		 //csnÖÃµÍ
+#define RF24L01_CSN_LOW()      GPIO_ResetBits(GPIOA, GPIO_Pin_4)		 //csnç½®ä½
 #define RF24L01_CE_HIGH()	   GPIO_SetBits(GPIOB,GPIO_Pin_1)
-#define RF24L01_CE_LOW()	   GPIO_ResetBits(GPIOB,GPIO_Pin_1)			  //CEÖÃµÍ
-#define RF24L01_Read_IRQ()		GPIO_ReadInputDataBit ( GPIOB, GPIO_Pin_0) //ÖĞ¶ÏÒı½Å
+#define RF24L01_CE_LOW()	   GPIO_ResetBits(GPIOB,GPIO_Pin_1)			  //CEç½®ä½
+#define RF24L01_Read_IRQ()		GPIO_ReadInputDataBit ( GPIOB, GPIO_Pin_0) //ä¸­æ–­å¼•è„š
 
 rt_err_t rt_hw_nRF24L01_init(const char * spi_device_name);
 

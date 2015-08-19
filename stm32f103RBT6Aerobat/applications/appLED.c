@@ -17,15 +17,6 @@ static void led_thread_entry(void* parameter)
 				{
 					if(ledStatus &0x10)
 					{
-						rt_hw_led_on(5);											
-					}
-					else
-					{
-						rt_hw_led_off(5);			
-					}
-					
-					if(ledStatus &0x08)
-					{
 						rt_hw_led_on(4);											
 					}
 					else
@@ -33,7 +24,7 @@ static void led_thread_entry(void* parameter)
 						rt_hw_led_off(4);			
 					}
 					
-					if(ledStatus &0x04)
+					if(ledStatus &0x08)
 					{
 						rt_hw_led_on(3);											
 					}
@@ -41,7 +32,8 @@ static void led_thread_entry(void* parameter)
 					{
 						rt_hw_led_off(3);			
 					}
-					if(ledStatus &0x2)
+					
+					if(ledStatus &0x04)
 					{
 						rt_hw_led_on(2);											
 					}
@@ -49,13 +41,21 @@ static void led_thread_entry(void* parameter)
 					{
 						rt_hw_led_off(2);			
 					}
-					if(ledStatus &0x01)
+					if(ledStatus &0x2)
 					{
 						rt_hw_led_on(1);											
 					}
 					else
 					{
 						rt_hw_led_off(1);			
+					}
+					if(ledStatus &0x01)
+					{
+						rt_hw_led_on(0);											
+					}
+					else
+					{
+						rt_hw_led_off(0);			
 					}					
 				}        			
     }

@@ -1,4 +1,4 @@
-#include "nRF24L01.h"
+ï»¿#include "nRF24L01.h"
 #include <rtthread.h>
 #include "CommunicationProtocol.h"
 
@@ -60,10 +60,10 @@ void rt_appNRF24L01_thread_entry(void* parameter) {
 //			
 //		
 //		RF24L01_TX_Mode();
-//		/*¿ªÊ¼·¢ËÍÊı¾İ*/	
+//		/*å¼€å§‹å‘é€æ•°æ®*/	
 //		status = RF24L01_Tx_Dat(txbuf);
 //		
-//		/*ÅĞ¶Ï·¢ËÍ×´Ì¬*/
+//		/*åˆ¤æ–­å‘é€çŠ¶æ€*/
 //		switch(status)
 //		{
 //			case MAX_RT:

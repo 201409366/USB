@@ -42,12 +42,12 @@ void rt_appManager_thread_entry(void* parameter) {
 		
 		//deal msg from nRF2401
 		cp = (CommunicationProtocol *)buff;
-		if(cp->authentication	== 0x797a) //yz
+		if(cp->authentication	== 0x7a79 && cp->type == 1) //yz
 		{
 			//这里应该检测CRC16
 				
 			//电机,采用写信的方式吧。
-			rt_mq_send(machineData_mq,&cp->m1pwm,5);
+			rt_mq_send(machineData_mq,&cp->m1pwm,4);
 			//LED,采用写信的方式吧。
 			rt_mq_send(ledData_mq,&cp->LEDS,1);
 		}

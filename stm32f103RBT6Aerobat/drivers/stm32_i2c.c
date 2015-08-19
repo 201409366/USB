@@ -1,4 +1,4 @@
-#include <rtthread.h>
+ï»¿#include <rtthread.h>
 #include <board.h>
 #include <rtdevice.h>
 
@@ -20,9 +20,9 @@
 //#define GPIO_PORT_I2C_SDA   GPIOC
 //#define PIN_I2C_SDA		    GPIO_Pin_11
 
-////IO·½ÏòÉèÖÃ
+////IOæ–¹å‘è®¾ç½®
 //#define SDA_IN()  {GPIO_PORT_I2C_SDA->CRH&=0XFFFF0FFF;GPIO_PORT_I2C_SDA->CRH|=8<<12;}
-////ÉÏÀ­/ÏÂÀ­ ÊäÈë
+////ä¸Šæ‹‰/ä¸‹æ‹‰ è¾“å…¥
 
 //#define SDA_OUT() {GPIO_PORT_I2C_SDA->CRH&=0XFFFF0FFF;GPIO_PORT_I2C_SDA->CRH|=3<<12;}
 ////
@@ -41,8 +41,8 @@ static void SDA_IN(void)
 		GPIO_InitTypeDef GPIO_InitStructure;
 	
 		GPIO_InitStructure.GPIO_Pin = PIN_I2C_SDA ;			
-		GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_IN_FLOATING;  	// ¸¡¿ÕÊäÈë
-		GPIO_Init(GPIO_PORT_I2C_SCL, &GPIO_InitStructure);				     	// Ñ¡ÔñC¶Ë¿Ú
+		GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_IN_FLOATING;  	// æµ®ç©ºè¾“å…¥
+		GPIO_Init(GPIO_PORT_I2C_SCL, &GPIO_InitStructure);				     	// é€‰æ‹©Cç«¯å£
 		
 }
 
@@ -51,9 +51,9 @@ static void SDA_OUT(void)
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
 	GPIO_InitStructure.GPIO_Pin = PIN_I2C_SDA ;			
-	GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_Out_OD;		  	// ¿ªÂ©Êä³ö
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 	// ×î¸ßÊä³öËÙÂÊ50MHz
-	GPIO_Init(GPIO_PORT_I2C_SCL, &GPIO_InitStructure);				 	    // Ñ¡ÔñC¶Ë¿Ú
+	GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_Out_OD;		  	// å¼€æ¼è¾“å‡º
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 	// æœ€é«˜è¾“å‡ºé€ŸçŽ‡50MHz
+	GPIO_Init(GPIO_PORT_I2C_SCL, &GPIO_InitStructure);				 	    // é€‰æ‹©Cç«¯å£
 }
 
 static void SCL_IN(void)
@@ -451,12 +451,12 @@ rt_err_t rt_hw_i2c_init(void)
 		I2C_InitStructure.I2C_OwnAddress1 = 0x30;
 		I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
 		I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
-		I2C_InitStructure.I2C_ClockSpeed = 100000;  /* 100KËÙ¶È */
+		I2C_InitStructure.I2C_ClockSpeed = 100000;  /* 100Ké€Ÿåº¦ */
 		
 		I2C_Init(I2C1, &I2C_InitStructure);
 		
 		I2C_Cmd(I2C1, ENABLE);		
-		/*ÔÊÐí1×Ö½Ú1Ó¦´ðÄ£Ê½*/
+		/*å…è®¸1å­—èŠ‚1åº”ç­”æ¨¡å¼*/
 		I2C_AcknowledgeConfig(I2C1, ENABLE);
 
 		rt_memset((void *)&stm32_i2c1, 0, sizeof(struct rt_i2c_bus_device));

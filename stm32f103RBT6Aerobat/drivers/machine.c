@@ -3,10 +3,19 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+//#define TimerPeriod (24000000/15600)
+#define TimerPeriod (24000000/100000)
+
+//uint16_t CCR1_Val = TimerPeriod * 0.08;
+//uint16_t CCR2_Val = TimerPeriod * 0.08;
+//uint16_t CCR3_Val = TimerPeriod * 0.08;
+//uint16_t CCR4_Val = TimerPeriod * 0.08;
+
 uint16_t CCR1_Val = 0;
 uint16_t CCR2_Val = 0;
 uint16_t CCR3_Val = 0;
 uint16_t CCR4_Val = 0;
+
 uint16_t PrescalerValue = 0;
 
 void rt_hw_machine_init(void) {
@@ -54,7 +63,7 @@ void rt_hw_machine_init(void) {
 		PrescalerValue = (uint16_t) (SystemCoreClock / 24000000) - 1;
 		//PrescalerValue = (uint16_t) (SystemCoreClock / 2400) - 1;
 		/* Time base configuration */
-		TIM_TimeBaseStructure.TIM_Period = 665;
+		TIM_TimeBaseStructure.TIM_Period = TimerPeriod - 1;
 		//TIM_TimeBaseStructure.TIM_Period = 2400;
 		TIM_TimeBaseStructure.TIM_Prescaler = PrescalerValue;
 		TIM_TimeBaseStructure.TIM_ClockDivision = 0;
@@ -106,17 +115,63 @@ void rt_hw_machine_init(void) {
 
 void rt_hw_setMathine1PWM(rt_uint8_t pwm)
 {
-	rt_kprintf("set machine 1 pwm = %d",pwm);
+	TIM_OCInitTypeDef  TIM_OCInitStructure;
+	
+	CCR1_Val = pwm / 100.0 * TimerPeriod;
+	
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+	TIM_OCInitStructure.TIM_Pulse = CCR1_Val;
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+
+	TIM_OC1Init(TIM2, &TIM_OCInitStructure);
+	
+	
+	rt_kprintf("set machine 1 pwm = %d\n",pwm);
 }
 void rt_hw_setMathine2PWM(rt_uint8_t pwm)
 {
-	rt_kprintf("set machine 2 pwm = %d",pwm);
+	TIM_OCInitTypeDef  TIM_OCInitStructure;
+	
+	CCR2_Val = pwm / 100.0 * TimerPeriod;
+	
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+	TIM_OCInitStructure.TIM_Pulse = CCR2_Val;
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+
+	TIM_OC2Init(TIM2, &TIM_OCInitStructure);
+	
+	rt_kprintf("set machine 2 pwm = %d\n",pwm);
 }
 void rt_hw_setMathine3PWM(rt_uint8_t pwm)
 {
-	rt_kprintf("set machine 3 pwm = %d",pwm);
+	TIM_OCInitTypeDef  TIM_OCInitStructure;
+	
+	CCR3_Val = pwm / 100.0 * TimerPeriod;
+	
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+	TIM_OCInitStructure.TIM_Pulse = CCR3_Val;
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+
+	TIM_OC3Init(TIM2, &TIM_OCInitStructure);
+	
+	
+	rt_kprintf("set machine 3 pwm = %d\n",pwm);
 }
 void rt_hw_setMathine4PWM(rt_uint8_t pwm)
 {
-	rt_kprintf("set machine 4 pwm = %d",pwm);
+	TIM_OCInitTypeDef  TIM_OCInitStructure;
+	
+	CCR4_Val = pwm / 100.0 * TimerPeriod;
+	
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+	TIM_OCInitStructure.TIM_Pulse = CCR4_Val;
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+
+	TIM_OC4Init(TIM2, &TIM_OCInitStructure);
+		
+	rt_kprintf("set machine 4 pwm = %d\n",pwm);
 }

@@ -4,7 +4,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 //#define TimerPeriod (24000000/15600)
-#define TimerPeriod (24000000/100000)
+//#define TimerPeriod (24000000/64000)
+#define TimerPeriod 	375
 
 //uint16_t CCR1_Val = TimerPeriod * 0.08;
 //uint16_t CCR2_Val = TimerPeriod * 0.08;

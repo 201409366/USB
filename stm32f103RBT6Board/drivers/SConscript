@@ -10,12 +10,11 @@ board.c
 stm32f10x_it.c
 led.c
 usart.c
-nRF24L01.c
 platform.c
 """)
 
 if GetDepend('RT_USING_I2C'):
-	src += ['stm32_i2c.c']
+	src += ['stm32_i2c.c','nRF24L01.c']
 	
 if GetDepend('RT_USING_SPI'):
     src += ['rt_stm32f10x_spi.c']

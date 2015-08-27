@@ -74,7 +74,7 @@
 /* the buffer size of console*/
 #define RT_CONSOLEBUF_SIZE	        128
 // <string name="RT_CONSOLE_DEVICE_NAME" description="The device name for console" default="uart1" />
-#define RT_CONSOLE_DEVICE_NAME	    "uart2"
+#define RT_CONSOLE_DEVICE_NAME	    "uart1"
 
 /* SECTION: finsh, a C-Express shell */
 #define RT_USING_FINSH
@@ -186,7 +186,7 @@
 // <bool name="RT_USING_BSP_CMSIS" description="Using CMSIS in BSP" default="true" />
 // #define RT_USING_BSP_CMSIS
 
-#define RT_USING_I2C
-#define RT_USING_I2C_BITOPS
+//#define RT_USING_I2C
+//#define RT_USING_I2C_BITOPS
 
 #endif

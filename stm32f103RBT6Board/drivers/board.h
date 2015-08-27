@@ -46,9 +46,9 @@
 //#define RT_USING_UART3
 
 //#define RT_USING_W25QXX
-#define RT_USING_NRF24L01
+//#define RT_USING_NRF24L01
 
-#define RT_USING_USARTAPP
+//#define RT_USING_USARTAPP
 
 // #define RT_USING_24C02
 

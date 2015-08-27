@@ -27,7 +27,6 @@
           <SLE66AMisc />
           <SLE66LinkerMisc />
           <SFDFile>SFD\ST\STM32F10xx\STM32F10xxE.sfr</SFDFile>
-          <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath />
           <IncludePath />
@@ -95,7 +94,6 @@
           <StopOnExitCode>3</StopOnExitCode>
           <CustomArgument />
           <IncludeLibraryModules />
-          <ComprImg>1</ComprImg>
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
@@ -125,20 +123,17 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>0</UseTarget>
             <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>1</RunToMain>
+            <RunToMain>0</RunToMain>
             <RestoreBreakpoints>1</RestoreBreakpoints>
             <RestoreWatchpoints>1</RestoreWatchpoints>
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>0</TargetSelection>
@@ -167,14 +162,10 @@
             <Capability>1</Capability>
             <DriverSelection>4096</DriverSelection>
           </Flash1>
-          <bUseTDR>1</bUseTDR>
+          <bUseTDR>0</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4 />
-          <pFcarmOut />
-          <pFcarmGrp />
-          <pFcArmRoot />
-          <FcArmLst>0</FcArmLst>
         </Utilities>
         <TargetArmAds>
           <ArmAdsMisc>
@@ -353,8 +344,6 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>0</uC99>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls />
               <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
@@ -371,7 +360,6 @@
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls />
               <Define />
@@ -388,7 +376,6 @@
             <useFile>0</useFile>
             <TextAddressRange>0x08000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
-            <pXoBase />
             <ScatterFile />
             <IncludeLibs />
             <IncludeLibsPath />
@@ -401,27 +388,6 @@
       <Groups>
         <Group>
           <GroupName>Applications</GroupName>
-          <Files>
-            <File>
-              <FileName>app24C02Test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\app24C02Test.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>appNRF24L01.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\appNRF24L01.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>appUsart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\appUsart.c</FilePath>
-            </File>
-          </Files>
           <Files>
             <File>
               <FileName>application.c</FileName>
@@ -465,13 +431,6 @@
               <FileName>usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>drivers\usart.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>nRF24L01.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>drivers\nRF24L01.c</FilePath>
             </File>
           </Files>
           <Files>
@@ -813,6 +772,13 @@
               <FileName>spi_dev.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\drivers\spi\spi_dev.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>spi_flash_w25qxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\spi\spi_flash_w25qxx.c</FilePath>
             </File>
           </Files>
           <Files>

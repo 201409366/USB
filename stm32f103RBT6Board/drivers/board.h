@@ -16,7 +16,6 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#include <rtthread.h>
 #include "stm32f10x.h"
 
 /* board configuration */
@@ -42,15 +41,8 @@
 
 /* USART driver select. */
 #define RT_USING_UART1
-#define RT_USING_UART2
+//#define RT_USING_UART2
 //#define RT_USING_UART3
-
-//#define RT_USING_W25QXX
-//#define RT_USING_NRF24L01
-
-//#define RT_USING_USARTAPP
-
-// #define RT_USING_24C02
 
 void rt_hw_board_init(void);
 

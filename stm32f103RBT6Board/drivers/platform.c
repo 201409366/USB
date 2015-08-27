@@ -4,13 +4,13 @@
 #ifdef RT_USING_SPI
 #include "rt_stm32f10x_spi.h"
 
+#ifdef RT_USING_W25QXX
+		#include "spi_flash_w25qxx.h"
+#endif /* RT_USING_W25QXX */	
+
 #ifdef RT_USING_NRF24L01
 		#include "nRF24L01.h"
 #endif /* RT_USING_NRF24L01 */	
-
-#ifdef RT_USING_I2C	
-	extern rt_err_t rt_hw_i2c_init(void);
-#endif /* RT_USING_I2C */	
 
 static void rt_hw_spi_init(void)
 {
@@ -49,15 +49,13 @@ static void rt_hw_spi_init(void)
     {
         static struct rt_spi_device spi_device;
         static struct stm32_spi_cs  spi_cs;
-			
-				RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE); 				
-			
+
 				GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
 				GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
 				GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-				GPIO_Init(GPIOC, &GPIO_InitStructure);
+				GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-        spi_cs.GPIOx = GPIOC;
+        spi_cs.GPIOx = GPIOA;
         spi_cs.GPIO_Pin = GPIO_Pin_4;
 
         GPIO_InitStructure.GPIO_Pin = spi_cs.GPIO_Pin;
@@ -104,18 +102,13 @@ void rt_platform_init(void)
     /* initilize key module */
     //rt_hw_key_init();
 	
-#if defined(RT_USING_DFS) && defined(RT_USING_DFS_ELMFAT)		
+#ifdef RT_USING_W25QXX
 		//rt_hw_sst25vfxx_init("sst25vfxx");
-		w25qxx_init("spi0","w25qxx");
+		w25qxx_init("spi_flash_0","w25qxx");
 #endif  /* RT_USING_DFS */
 
 #ifdef RT_USING_NRF24L01
-		rt_hw_nRF24L01_init("nRF24L01");		
-#endif /* RT_USING_NRF24L01 */	
-
-#ifdef RT_USING_I2C	
-	//rt_hw_i2c_init();
-#endif /* RT_USING_I2C */	
-	
+		rt_hw_2401_init();
+#endif 
 }
 

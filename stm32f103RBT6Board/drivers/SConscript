@@ -13,13 +13,10 @@ usart.c
 platform.c
 """)
 
-if GetDepend('RT_USING_I2C'):
-	src += ['stm32_i2c.c','nRF24L01.c']
-	
+# add Ethernet drivers.
 if GetDepend('RT_USING_SPI'):
     src += ['rt_stm32f10x_spi.c']
     
-# add Ethernet drivers.
 if GetDepend('RT_USING_LWIP'):
     src += ['dm9000a.c']
 

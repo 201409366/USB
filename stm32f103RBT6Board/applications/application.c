@@ -58,14 +58,14 @@ static void led_thread_entry(void* parameter)
         rt_kprintf("led on, count : %d\r\n",count);
 #endif
         count++;
-        rt_hw_led_on(1);
+        rt_hw_led_on(0);
         rt_thread_delay( RT_TICK_PER_SECOND/2 ); /* sleep 0.5 second and switch to other thread */
 
         /* led1 off */
 #ifndef RT_USING_FINSH
         rt_kprintf("led off\r\n");
 #endif
-        rt_hw_led_off(1);
+        rt_hw_led_off(0);
         rt_thread_delay( RT_TICK_PER_SECOND/2 );
     }
 }
@@ -87,8 +87,6 @@ void cali_store(struct calibration_data *data)
 }
 #endif /* RT_USING_RTGUI */
 
-
-extern rt_err_t app24C02Init(void);
 void rt_init_thread_entry(void* parameter)
 {
 
@@ -147,19 +145,6 @@ void rt_init_thread_entry(void* parameter)
         calibration_init();
     }
 #endif /* #ifdef RT_USING_RTGUI */
-		
-#ifdef RT_USING_NRF24L01
-		appNRF24L01Init();
-#endif /* RT_USING_NRF24L01 */	
-		
-#ifdef RT_USING_USARTAPP
-		appUsartInit();	
-#endif /* RT_USING_USARTAPP */		
-
-#ifdef RT_USING_24C02
-		app24C02Init();
-#endif /* RT_USING_USARTAPP */		
-		
 }
 
 int rt_application_init(void)

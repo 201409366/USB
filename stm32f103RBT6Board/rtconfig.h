@@ -186,7 +186,6 @@
 // <bool name="RT_USING_BSP_CMSIS" description="Using CMSIS in BSP" default="true" />
 // #define RT_USING_BSP_CMSIS
 
-//#define RT_USING_I2C
-//#define RT_USING_I2C_BITOPS
+#define RT_USING_W25QXX
 
 #endif
